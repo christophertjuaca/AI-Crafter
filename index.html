@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-t" />
+    <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Cover Letter Crafter</title>
@@ -27,18 +27,19 @@
   <script type="importmap">
 {
   "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.1.1/",
-    "react": "https://aistudiocdn.com/react@^19.1.1",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.19.0",
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "@google/genai": "https://esm.sh/@google/genai@0.2.1",
+    "jspdf": "https://esm.sh/jspdf@2.5.1",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
-    "jspdf": "https://aistudiocdn.com/jspdf@^2.5.1"
+    "react/": "https://aistudiocdn.com/react@^19.1.1/"
   }
 }
 </script>
 </head>
   <body class="bg-slate-50 text-slate-800">
     <div id="root"></div>
-    <!-- Changed script type to text/babel for transpilation -->
-    <script type="text/babel" data-presets="react,typescript" data-type="module" src="./index.tsx"></script>
+    <!-- The single bundled script for the entire application -->
+    <script type="text/babel" data-presets="react,typescript" data-type="module" src="./bundle.tsx"></script>
   </body>
 </html>
