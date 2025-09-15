@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Cover Letter Crafter</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Babel Standalone for in-browser transpilation -->
+    <script src="https://unpkg.com/@babel/standalone@7.24.0/babel.min.js"></script>
     <style>
       /* For Webkit-based browsers (Chrome, Safari) */
       ::-webkit-scrollbar {
@@ -36,6 +38,7 @@
 </head>
   <body class="bg-slate-50 text-slate-800">
     <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
+    <!-- Changed script type to text/babel for transpilation -->
+    <script type="text/babel" data-presets="react,typescript" data-type="module" src="./index.tsx"></script>
   </body>
 </html>

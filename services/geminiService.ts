@@ -2,11 +2,18 @@ import { GoogleGenAI, Chat, Type } from "@google/genai";
 import type { CoverLetterRequest, ChatMessage, GeneratedContent } from '../types';
 import { Language } from '../types';
 
-if (!process.env.API_KEY) {
-  throw new Error("API_KEY environment variable not set");
-}
+// Helper function to get the AI client on demand
+// This prevents a crash on load if the API key isn't set.
+const getAiClient = () => {
+  // In a browser environment, 'process' is not defined. We must check for its existence.
+  const apiKey = typeof process !== 'undefined' && process.env ? process.env.API_KEY : undefined;
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  if (!apiKey) {
+    throw new Error("API_KEY is not configured for this environment. The application cannot contact the AI service.");
+  }
+  return new GoogleGenAI({ apiKey });
+};
+
 
 export async function generateHiringDocuments(request: CoverLetterRequest): Promise<{ content: GeneratedContent; sources: any[] }> {
   const { cv, jobDescription, tone, companyType, companyName, jobTitle, language, fullName, email, phone, address } = request;
@@ -85,6 +92,7 @@ export async function generateHiringDocuments(request: CoverLetterRequest): Prom
   }
 
   try {
+    const ai = getAiClient(); // Get client here
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: { parts },
@@ -107,6 +115,9 @@ export async function generateHiringDocuments(request: CoverLetterRequest): Prom
     return { content, sources };
   } catch (error) {
     console.error("Error generating content from Gemini API:", error);
+    if (error instanceof Error) {
+        throw new Error(`Failed to communicate with the AI model: ${error.message}`);
+    }
     throw new Error("Failed to communicate with the AI model. Please check your API key and network connection.");
   }
 }
@@ -126,6 +137,7 @@ export function createCVInterviewChat(language: Language): Chat {
 
   Keep your questions clear, concise, and encouraging. Once you have gathered all the information, end the conversation by saying '${isEnglish ? "Thank you! I have all the information needed to create your CV." : "Terima kasih! Saya memiliki semua informasi yang dibutuhkan untuk membuat CV Anda."}'`;
   
+  const ai = getAiClient(); // Get client here
   return ai.chats.create({
     model: 'gemini-2.5-flash',
     config: { systemInstruction },
@@ -146,6 +158,7 @@ export async function generateCVFromHistory(messages: ChatMessage[]): Promise<st
     \`\`\`
   `;
   try {
+    const ai = getAiClient(); // Get client here
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: prompt,
