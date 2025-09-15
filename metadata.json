@@ -1,0 +1,7 @@
+{
+  "name": "AI Cover Letter Crafter",
+  "description": "An intelligent web application that helps users generate personalized cover letters by analyzing their CV, the job description, and desired tone.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
